@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { Goal, CreateGoalFormData } from "@/lib/types";
-import { useGoals } from "@/lib/context/GoalContext";
-import { GoalForm } from "./GoalForm";
-import { GoalList } from "./GoalList";
-import { GoalDetails } from "./GoalDetails";
-import { Analytics } from "./Analytics";
+import { useGoals } from "@/lib/context/goal-context";
+import { GoalForm } from "./goal-form";
+import { GoalList } from "./goal-list";
+import { GoalDetails } from "./goal-details";
+import { Analytics } from "./analytics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { checkForReminders } from "@/lib/services/notificationService";
-import Settings from "./Settings";
+import { checkForReminders } from "@/lib/services/notification-service";
+import Settings from "./settings";
 import { ModeToggle } from "./mode-toggle";
 
 export function Dashboard() {

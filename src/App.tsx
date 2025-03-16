@@ -1,6 +1,6 @@
-import { Dashboard } from "@/components/Dashboard";
+import { Dashboard } from "@/components/dashboard";
 import { Toaster } from "@/components/ui/toaster";
-import { GoalProvider } from "@/lib/context/GoalContext";
+import { GoalProvider } from "@/lib/context/goal-context";
 import { ThemeProvider } from "@/components/theme-provider";
 
 function App() {

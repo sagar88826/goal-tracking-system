@@ -1,6 +1,6 @@
 import { Goal } from "../types";
 import { toast } from "../hooks/use-toast";
-import { calculateActualProgress, calculatePlannedProgress, getGoalById, getProgressForGoal } from "./goalService";
+import { calculateActualProgress, calculatePlannedProgress, getGoalById, getProgressForGoal } from "./goal-service";
 
 // Constants for notification settings
 const NOTIFICATION_STORAGE_KEY = "gts_notifications";

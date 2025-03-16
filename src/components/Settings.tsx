@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/lib/hooks/use-toast";
-import { getNotificationSettings, saveNotificationSettings } from "@/lib/services/notificationService";
-import { exportUserData, importUserData, clearUserData } from "@/lib/services/dataService";
+import { getNotificationSettings, saveNotificationSettings } from "@/lib/services/notification-service";
+import { exportUserData, importUserData, clearUserData } from "@/lib/services/data-service";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 // Define the NotificationSettings interface

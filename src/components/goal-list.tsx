@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Goal } from "@/lib/types";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useGoals } from "@/lib/context/GoalContext";
+import { useGoals } from "@/lib/context/goal-context";
 
 interface GoalListProps {
   goals: Goal[];

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Goal } from "@/lib/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useGoals } from "@/lib/context/GoalContext";
-import { ProgressForm } from "./ProgressForm";
+import { useGoals } from "@/lib/context/goal-context";
+import { ProgressForm } from "./progress-form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface GoalDetailsProps {

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Goal, ProgressEntry, CreateGoalFormData, LogProgressFormData } from "../types";
-import * as goalService from "../services/goalService";
+import * as goalService from "../services/goal-service";
 
 interface GoalContextType {
   goals: Goal[];

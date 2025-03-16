@@ -1,4 +1,4 @@
-import { getAllGoals as getGoals } from "@/lib/services/goalService";
+import { getAllGoals as getGoals } from "@/lib/services/goal-service";
 import { toast } from "@/lib/hooks/use-toast";
 
 // Define a type for the imported goal data

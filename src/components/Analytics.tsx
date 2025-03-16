@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProgressEntry } from "@/lib/types";
-import { useGoals } from "@/lib/context/GoalContext";
+import { useGoals } from "@/lib/context/goal-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
