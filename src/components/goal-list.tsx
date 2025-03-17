@@ -59,9 +59,9 @@ export function GoalList({ goals, onEdit, onDelete, onViewDetails }: GoalListPro
       {goals.map((goal) => (
         <Card key={goal.id} className="w-full">
           <CardHeader className="pb-2">
-            <div className="flex justify-between items-start">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <div>
-                <CardTitle className="text-xl">{goal.title}</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">{goal.title}</CardTitle>
                 <CardDescription>Deadline: {formatDate(goal.deadline)}</CardDescription>
               </div>
               <div className="flex items-center space-x-1">
@@ -73,13 +73,16 @@ export function GoalList({ goals, onEdit, onDelete, onViewDetails }: GoalListPro
 
           <CardContent className="pb-2">
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-              <div className={`h-2.5 rounded-full ${getStatusColor(goal)}`} style={{ width: `${calculateProgressPercentage(goal)}%` }}></div>
+              <div
+                className={`h-2.5 rounded-full ${getStatusColor(goal)}`}
+                style={{ width: `${calculateProgressPercentage(goal)}%` }}
+              ></div>
             </div>
 
             {expandedGoalId === goal.id && (
               <div className="mt-4 space-y-2 text-sm">
                 {goal.description && <p className="text-gray-600 dark:text-gray-400">{goal.description}</p>}
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
                     <p className="font-medium">Total Required:</p>
                     <p>{goal.totalRequiredTime} hours</p>
@@ -111,18 +114,18 @@ export function GoalList({ goals, onEdit, onDelete, onViewDetails }: GoalListPro
             )}
           </CardContent>
 
-          <CardFooter className="flex justify-between pt-2">
+          <CardFooter className="flex flex-col sm:flex-row justify-between pt-2 gap-2">
             <Button variant="ghost" size="sm" onClick={() => toggleExpand(goal.id)}>
               {expandedGoalId === goal.id ? "Less" : "More"}
             </Button>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm" onClick={() => onViewDetails(goal)}>
+            <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto justify-end">
+              <Button variant="outline" size="sm" onClick={() => onViewDetails(goal)} className="flex-1 sm:flex-none">
                 Details
               </Button>
-              <Button variant="outline" size="sm" onClick={() => onEdit(goal)}>
+              <Button variant="outline" size="sm" onClick={() => onEdit(goal)} className="flex-1 sm:flex-none">
                 Edit
               </Button>
-              <Button variant="outline" size="sm" onClick={() => onDelete(goal.id)}>
+              <Button variant="outline" size="sm" onClick={() => onDelete(goal.id)} className="flex-1 sm:flex-none">
                 Delete
               </Button>
             </div>

@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createGoalSchema, type CreateGoalFormData, type Goal } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -79,93 +78,128 @@ export function GoalForm({ onSubmit, initialData, isEditing = false }: GoalFormP
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="totalRequiredTime"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Total Required Time (hours)</FormLabel>
-              <FormControl>
-                <Input type="number" min="0" step="0.5" placeholder="100" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="totalRequiredTime"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Total Required Time (hours)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    placeholder="100"
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="deadline"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Deadline</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button variant="outline" className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
-                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))} initialFocus />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="space-y-4 pt-2">
-          <Label className="text-base">Optional Time Allotments</Label>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <FormField
-              control={form.control}
-              name="dailyTimeAllotment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Daily Time (hours)</FormLabel>
-                  <FormControl>
-                    <Input type="number" min="0" step="0.5" placeholder="1" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="weeklyTimeAllotment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Weekly Time (hours)</FormLabel>
-                  <FormControl>
-                    <Input type="number" min="0" step="0.5" placeholder="7" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="monthlyTimeAllotment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Monthly Time (hours)</FormLabel>
-                  <FormControl>
-                    <Input type="number" min="0" step="0.5" placeholder="30" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="deadline"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Deadline</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                      >
+                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) => date < new Date()}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
-        <div className="pt-4 flex justify-end">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <FormField
+            control={form.control}
+            name="dailyTimeAllotment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Daily Goal (hours)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    placeholder="1"
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="weeklyTimeAllotment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Weekly Goal (hours)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    placeholder="7"
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="monthlyTimeAllotment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Monthly Goal (hours)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    placeholder="30"
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Saving..." : isEditing ? "Update Goal" : "Create Goal"}
           </Button>

@@ -59,7 +59,9 @@ export function Analytics() {
   const mostProductiveDay = [...progressByDayOfWeek].sort((a, b) => b.hours - a.hours)[0];
 
   // Calculate recent progress trend (last 7 entries)
-  const recentEntries = [...allProgressEntries].sort((a, b) => new Date(b.entry.date).getTime() - new Date(a.entry.date).getTime()).slice(0, 7);
+  const recentEntries = [...allProgressEntries]
+    .sort((a, b) => new Date(b.entry.date).getTime() - new Date(a.entry.date).getTime())
+    .slice(0, 7);
 
   // Calculate goal with best progress relative to plan
   const goalProgressRatios = goals.map((goal) => {
@@ -78,7 +80,7 @@ export function Analytics() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Analytics & Insights</h2>
+      <h2 className="text-xl sm:text-2xl font-bold">Analytics & Insights</h2>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">
@@ -89,25 +91,28 @@ export function Analytics() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4 mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Overall Completion</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Overall Completion</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">{overallCompletionPercentage}%</div>
+                <div className="text-2xl sm:text-3xl font-bold">{overallCompletionPercentage}%</div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {totalCompletedHours.toFixed(1)} of {totalRequiredHours.toFixed(1)} hours
                 </p>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2">
-                  <div className="h-2.5 rounded-full bg-blue-600" style={{ width: `${overallCompletionPercentage}%` }}></div>
+                  <div
+                    className="h-2.5 rounded-full bg-blue-600"
+                    style={{ width: `${overallCompletionPercentage}%` }}
+                  ></div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Goal Status</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Goal Status</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center space-x-2 mb-2">
@@ -123,7 +128,7 @@ export function Analytics() {
 
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Planned vs Actual</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Planned vs Actual</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
@@ -133,7 +138,10 @@ export function Analytics() {
                       <span>{overallPlannedPercentage}%</span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <div className="h-2 rounded-full bg-blue-300" style={{ width: `${overallPlannedPercentage}%` }}></div>
+                      <div
+                        className="h-2 rounded-full bg-blue-300"
+                        style={{ width: `${overallPlannedPercentage}%` }}
+                      ></div>
                     </div>
                   </div>
                   <div>
@@ -142,7 +150,10 @@ export function Analytics() {
                       <span>{overallCompletionPercentage}%</span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <div className="h-2 rounded-full bg-blue-600" style={{ width: `${overallCompletionPercentage}%` }}></div>
+                      <div
+                        className="h-2 rounded-full bg-blue-600"
+                        style={{ width: `${overallCompletionPercentage}%` }}
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -150,105 +161,131 @@ export function Analytics() {
             </Card>
           </div>
 
-          {bestPerformingGoal && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Best Performing Goal</CardTitle>
-                <CardDescription>{bestPerformingGoal.title}</CardDescription>
+              <CardHeader>
+                <CardTitle className="text-base sm:text-lg">Best Performing Goal</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">You're making excellent progress on this goal! Keep up the good work.</p>
-              </CardContent>
-            </Card>
-          )}
-
-          {recentEntries.length > 0 && (
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {recentEntries.map(({ entry, goalTitle }, index) => (
-                    <div key={index} className="flex justify-between items-center text-sm">
-                      <div>
-                        <span className="font-medium">{entry.timeSpent} hours</span>
-                        <span className="text-gray-500 dark:text-gray-400"> on {goalTitle}</span>
-                      </div>
-                      <span className="text-gray-500 dark:text-gray-400">{formatDate(entry.date)}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-
-        {/* Patterns Tab */}
-        <TabsContent value="patterns" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Progress Patterns</CardTitle>
-              <CardDescription>Your progress distribution throughout the week</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {progressByDayOfWeek.map((day, index) => (
-                  <div key={index} className="space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span>{day.day}</span>
-                      <span>{day.hours.toFixed(1)} hours</span>
-                    </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                {bestPerformingGoal ? (
+                  <div>
+                    <h4 className="font-medium">{bestPerformingGoal.title}</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {calculateActualProgress(bestPerformingGoal.id)} of {bestPerformingGoal.totalRequiredTime} hours
+                      completed
+                    </p>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2">
                       <div
-                        className={`h-2 rounded-full ${day.day === mostProductiveDay.day ? "bg-green-500" : "bg-blue-500"}`}
+                        className="h-2.5 rounded-full bg-green-500"
                         style={{
-                          width: `${Math.max((day.hours / Math.max(...progressByDayOfWeek.map((d) => d.hours))) * 100, day.hours > 0 ? 5 : 0)}%`,
+                          width: `${Math.min(
+                            Math.round(
+                              (calculateActualProgress(bestPerformingGoal.id) / bestPerformingGoal.totalRequiredTime) *
+                                100
+                            ),
+                            100
+                          )}%`,
                         }}
                       ></div>
                     </div>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">No goals with progress yet.</p>
+                )}
+              </CardContent>
+            </Card>
 
-              {mostProductiveDay.hours > 0 && (
-                <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-md">
-                  <p className="text-green-700 dark:text-green-400">
-                    <span className="font-medium">Most productive day:</span> {mostProductiveDay.day}({mostProductiveDay.hours.toFixed(1)} hours)
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Goal Distribution</CardTitle>
-              <CardDescription>How your time is distributed across goals</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {goals.map((goal) => {
-                  const hoursSpent = calculateActualProgress(goal.id);
-                  const percentage = Math.round((hoursSpent / totalCompletedHours) * 100) || 0;
-
-                  return (
-                    <div key={goal.id} className="space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span className="truncate max-w-[200px]">{goal.title}</span>
-                        <span>
-                          {percentage}% ({hoursSpent.toFixed(1)} hours)
-                        </span>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base sm:text-lg">Recent Activity</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {recentEntries.length > 0 ? (
+                  <div className="space-y-2">
+                    {recentEntries.slice(0, 3).map(({ entry, goalTitle }) => (
+                      <div key={entry.id} className="flex justify-between items-center text-sm">
+                        <div>
+                          <span className="font-medium">{goalTitle}</span>
+                          <span className="text-gray-500 dark:text-gray-400"> • {entry.timeSpent} hours</span>
+                        </div>
+                        <span className="text-gray-500 dark:text-gray-400">{formatDate(entry.date)}</span>
                       </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div className="h-2 rounded-full bg-blue-500" style={{ width: `${percentage}%` }}></div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">No recent activity.</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Patterns Tab */}
+        <TabsContent value="patterns" className="space-y-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base sm:text-lg">Weekly Activity Pattern</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {progressByDayOfWeek.map((day) => (
+                    <div key={day.day} className="flex items-center space-x-2">
+                      <div className="w-20 text-sm">{day.day}</div>
+                      <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div
+                          className="h-2 rounded-full bg-blue-600"
+                          style={{
+                            width: `${
+                              Math.max(...progressByDayOfWeek.map((d) => d.hours)) > 0
+                                ? (day.hours / Math.max(...progressByDayOfWeek.map((d) => d.hours))) * 100
+                                : 0
+                            }%`,
+                          }}
+                        ></div>
                       </div>
+                      <div className="w-16 text-right text-sm">{day.hours.toFixed(1)}h</div>
                     </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+                {mostProductiveDay.hours > 0 && (
+                  <p className="text-sm mt-4">
+                    <span className="font-medium">Most productive day:</span> {mostProductiveDay.day} (
+                    {mostProductiveDay.hours.toFixed(1)} hours)
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Goal Distribution</CardTitle>
+                <CardDescription>How your time is distributed across goals</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {goals.map((goal) => {
+                    const hoursSpent = calculateActualProgress(goal.id);
+                    const percentage = Math.round((hoursSpent / totalCompletedHours) * 100) || 0;
+
+                    return (
+                      <div key={goal.id} className="space-y-1">
+                        <div className="flex justify-between text-sm">
+                          <span className="truncate max-w-[200px]">{goal.title}</span>
+                          <span>
+                            {percentage}% ({hoursSpent.toFixed(1)} hours)
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                          <div className="h-2 rounded-full bg-blue-500" style={{ width: `${percentage}%` }}></div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         {/* Recommendations Tab */}
@@ -265,7 +302,8 @@ export function Analytics() {
                   <ul className="list-disc pl-5 space-y-1">
                     {behindGoals.map((goal) => (
                       <li key={goal.id} className="text-sm text-yellow-700 dark:text-yellow-400">
-                        {goal.title} - {calculatePlannedProgress(goal).toFixed(1)} hours planned vs {calculateActualProgress(goal.id).toFixed(1)} hours completed
+                        {goal.title} - {calculatePlannedProgress(goal).toFixed(1)} hours planned vs{" "}
+                        {calculateActualProgress(goal.id).toFixed(1)} hours completed
                       </li>
                     ))}
                   </ul>
@@ -276,7 +314,8 @@ export function Analytics() {
                 <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-md">
                   <h3 className="font-medium text-green-800 dark:text-green-400 mb-1">Optimize Your Schedule</h3>
                   <p className="text-sm text-green-700 dark:text-green-400">
-                    You're most productive on {mostProductiveDay.day}s. Consider scheduling more work on this day to maximize your efficiency.
+                    You're most productive on {mostProductiveDay.day}s. Consider scheduling more work on this day to
+                    maximize your efficiency.
                   </p>
                 </div>
               )}
@@ -285,7 +324,8 @@ export function Analytics() {
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-md">
                   <h3 className="font-medium text-blue-800 dark:text-blue-400 mb-1">Build on Your Success</h3>
                   <p className="text-sm text-blue-700 dark:text-blue-400">
-                    You're doing great with {onTrackGoals.length} goal(s)! Consider applying similar strategies to goals where you're falling behind.
+                    You're doing great with {onTrackGoals.length} goal(s)! Consider applying similar strategies to goals
+                    where you're falling behind.
                   </p>
                 </div>
               )}
@@ -294,7 +334,8 @@ export function Analytics() {
                 <div className="p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800 rounded-md">
                   <h3 className="font-medium text-purple-800 dark:text-purple-400 mb-1">Set Time Allotments</h3>
                   <p className="text-sm text-purple-700 dark:text-purple-400">
-                    Some of your goals don't have daily or weekly time allotments. Setting these can help you stay on track with regular progress.
+                    Some of your goals don't have daily or weekly time allotments. Setting these can help you stay on
+                    track with regular progress.
                   </p>
                 </div>
               )}

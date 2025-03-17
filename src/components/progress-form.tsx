@@ -5,6 +5,11 @@ import { logProgressSchema, type LogProgressFormData, type Goal } from "@/lib/ty
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface ProgressFormProps {
   goal: Goal;
@@ -13,11 +18,6 @@ interface ProgressFormProps {
 
 export function ProgressForm({ goal, onSubmit }: ProgressFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Format date for input field (YYYY-MM-DD)
-  const formatDateForInput = (date: Date) => {
-    return date.toISOString().split("T")[0];
-  };
 
   const form = useForm<LogProgressFormData>({
     resolver: zodResolver(logProgressSchema),
@@ -35,7 +35,7 @@ export function ProgressForm({ goal, onSubmit }: ProgressFormProps) {
       // Ensure date is a Date object
       const formattedData = {
         ...data,
-        date: new Date(data.date as unknown as string),
+        date: data.date instanceof Date ? data.date : new Date(data.date as unknown as string),
       };
       await onSubmit(formattedData);
       form.reset({
@@ -61,7 +61,14 @@ export function ProgressForm({ goal, onSubmit }: ProgressFormProps) {
             <FormItem>
               <FormLabel>Time Spent (hours)</FormLabel>
               <FormControl>
-                <Input type="number" min="0" step="0.25" placeholder="1.5" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                <Input
+                  type="number"
+                  min="0"
+                  step="0.25"
+                  placeholder="1.5"
+                  {...field}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,11 +79,29 @@ export function ProgressForm({ goal, onSubmit }: ProgressFormProps) {
           control={form.control}
           name="date"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Date</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} value={formatDateForInput(field.value as Date)} onChange={(e) => field.onChange(e.target.value)} />
-              </FormControl>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                    >
+                      {field.value ? format(new Date(field.value), "PPP") : <span>Pick a date</span>}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value instanceof Date ? field.value : new Date(field.value as string)}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -97,7 +122,7 @@ export function ProgressForm({ goal, onSubmit }: ProgressFormProps) {
         />
 
         <div className="pt-4 flex justify-end">
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
             {isSubmitting ? "Saving..." : "Log Progress"}
           </Button>
         </div>

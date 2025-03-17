@@ -7,7 +7,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="gts-ui-theme">
       <GoalProvider>
-        <div className="min-h-svh bg-background text-foreground">
+        <div className="min-h-svh bg-background text-foreground overflow-x-hidden">
           <Dashboard />
           <Toaster />
         </div>

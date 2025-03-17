@@ -7,7 +7,14 @@ import { GoalDetails } from "./goal-details";
 import { Analytics } from "./analytics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { checkForReminders } from "@/lib/services/notification-service";
 import Settings from "./settings";
 import { ModeToggle } from "./mode-toggle";
@@ -85,15 +92,15 @@ export function Dashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-center">Goal Tracking System</h1>
+    <div className="container mx-auto px-4 py-4 sm:py-6 md:py-8 max-w-full md:max-w-6xl">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-8 gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center sm:text-left">Goal Tracking System</h1>
         <ModeToggle />
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="flex justify-between items-center mb-6">
-          <TabsList>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-4">
+          <TabsList className="w-full sm:w-auto overflow-x-auto">
             <TabsTrigger value="goals">My Goals</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
@@ -103,32 +110,43 @@ export function Dashboard() {
           {activeTab === "goals" && (
             <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
               <DialogTrigger asChild>
-                <Button>Create New Goal</Button>
+                <Button className="w-full sm:w-auto">Create New Goal</Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
+              <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-full">
                 <DialogHeader>
                   <DialogTitle>{isEditing ? "Edit Goal" : "Create New Goal"}</DialogTitle>
-                  <DialogDescription>{isEditing ? "Update your goal details below." : "Fill in the details below to create a new goal."}</DialogDescription>
+                  <DialogDescription>
+                    {isEditing ? "Update your goal details below." : "Fill in the details below to create a new goal."}
+                  </DialogDescription>
                 </DialogHeader>
-                <GoalForm onSubmit={isEditing ? handleUpdateGoal : handleCreateGoal} initialData={selectedGoal || undefined} isEditing={isEditing} />
+                <GoalForm
+                  onSubmit={isEditing ? handleUpdateGoal : handleCreateGoal}
+                  initialData={selectedGoal || undefined}
+                  isEditing={isEditing}
+                />
               </DialogContent>
             </Dialog>
           )}
         </div>
 
-        <TabsContent value="goals" className="mt-6">
-          <GoalList goals={goals} onEdit={handleEditGoal} onDelete={handleDeleteGoal} onViewDetails={handleViewGoalDetails} />
+        <TabsContent value="goals" className="mt-4 sm:mt-6">
+          <GoalList
+            goals={goals}
+            onEdit={handleEditGoal}
+            onDelete={handleDeleteGoal}
+            onViewDetails={handleViewGoalDetails}
+          />
         </TabsContent>
 
-        <TabsContent value="analytics" className="mt-6">
+        <TabsContent value="analytics" className="mt-4 sm:mt-6">
           <Analytics />
         </TabsContent>
 
-        <TabsContent value="settings" className="mt-6">
+        <TabsContent value="settings" className="mt-4 sm:mt-6">
           <Settings />
         </TabsContent>
 
-        <TabsContent value="details" className="mt-6">
+        <TabsContent value="details" className="mt-4 sm:mt-6">
           {selectedGoal && <GoalDetails goal={selectedGoal} onBack={handleBackToGoals} />}
         </TabsContent>
       </Tabs>

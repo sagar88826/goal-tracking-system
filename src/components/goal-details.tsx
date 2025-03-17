@@ -4,7 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { useGoals } from "@/lib/context/goal-context";
 import { ProgressForm } from "./progress-form";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface GoalDetailsProps {
   goal: Goal;
@@ -13,7 +20,14 @@ interface GoalDetailsProps {
 
 export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
   const [isProgressDialogOpen, setIsProgressDialogOpen] = useState(false);
-  const { getProgressForGoal, logProgress, deleteProgressEntry, calculateActualProgress, calculatePlannedProgress, calculateDelay } = useGoals();
+  const {
+    getProgressForGoal,
+    logProgress,
+    deleteProgressEntry,
+    calculateActualProgress,
+    calculatePlannedProgress,
+    calculateDelay,
+  } = useGoals();
 
   const progressEntries = getProgressForGoal(goal.id);
   const actualProgress = calculateActualProgress(goal.id);
@@ -53,16 +67,16 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Button variant="outline" onClick={onBack}>
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
           Back to Goals
         </Button>
 
         <Dialog open={isProgressDialogOpen} onOpenChange={setIsProgressDialogOpen}>
           <DialogTrigger asChild>
-            <Button>Log Progress</Button>
+            <Button className="w-full sm:w-auto">Log Progress</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[500px] w-[95vw] max-w-full">
             <DialogHeader>
               <DialogTitle>Log Progress</DialogTitle>
               <DialogDescription>Record your progress for {goal.title}</DialogDescription>
@@ -80,7 +94,7 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">{goal.title}</CardTitle>
+          <CardTitle className="text-xl sm:text-2xl">{goal.title}</CardTitle>
           <CardDescription>Deadline: {formatDate(goal.deadline)}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -93,12 +107,12 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
 
           <div>
             <h3 className="text-lg font-medium mb-2">Progress Overview</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Total Required</p>
-                    <p className="text-2xl font-bold">{goal.totalRequiredTime} hours</p>
+                    <p className="text-xl sm:text-2xl font-bold">{goal.totalRequiredTime} hours</p>
                   </div>
                 </CardContent>
               </Card>
@@ -106,7 +120,7 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Completed</p>
-                    <p className="text-2xl font-bold">{actualProgress} hours</p>
+                    <p className="text-xl sm:text-2xl font-bold">{actualProgress} hours</p>
                     <p className="text-sm">{calculateProgressPercentage()}%</p>
                   </div>
                 </CardContent>
@@ -115,7 +129,7 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Planned Progress</p>
-                    <p className="text-2xl font-bold">{plannedProgress.toFixed(1)} hours</p>
+                    <p className="text-xl sm:text-2xl font-bold">{plannedProgress.toFixed(1)} hours</p>
                     <p className="text-sm">{calculatePlannedPercentage()}%</p>
                   </div>
                 </CardContent>
@@ -128,20 +142,25 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
                 <span>{calculateProgressPercentage()}%</span>
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                <div className={`h-2.5 rounded-full ${getStatusColor()}`} style={{ width: `${calculateProgressPercentage()}%` }}></div>
+                <div
+                  className={`h-2.5 rounded-full ${getStatusColor()}`}
+                  style={{ width: `${calculateProgressPercentage()}%` }}
+                ></div>
               </div>
             </div>
 
             {delay > 0 && (
               <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-md">
-                <p className="text-red-600 dark:text-red-400">You're behind schedule by approximately {delay.toFixed(1)} hours.</p>
+                <p className="text-red-600 dark:text-red-400">
+                  You're behind schedule by approximately {delay.toFixed(1)} hours.
+                </p>
               </div>
             )}
 
-            {(goal.dailyTimeAllotment || goal.weeklyTimeAllotment || goal.monthlyTimeAllotment) && (
+            {goal.dailyTimeAllotment || goal.weeklyTimeAllotment || goal.monthlyTimeAllotment ? (
               <div className="mt-4">
                 <h4 className="font-medium mb-2">Time Allotments</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {goal.dailyTimeAllotment ? (
                     <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-100 dark:border-gray-700">
                       <p className="font-medium">Daily Goal</p>
@@ -162,7 +181,7 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
                   ) : null}
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
 
           <div>
@@ -174,7 +193,10 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
                 {progressEntries
                   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                   .map((entry) => (
-                    <div key={entry.id} className="p-3 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-md flex justify-between items-center">
+                    <div
+                      key={entry.id}
+                      className="p-3 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2"
+                    >
                       <div>
                         <div className="flex items-center space-x-2">
                           <span className="font-medium">{entry.timeSpent} hours</span>
@@ -186,7 +208,7 @@ export function GoalDetails({ goal, onBack }: GoalDetailsProps) {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteEntry(entry.id)}
-                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 mt-2 sm:mt-0"
                       >
                         Delete
                       </Button>
